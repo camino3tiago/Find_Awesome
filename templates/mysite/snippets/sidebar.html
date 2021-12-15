@@ -1,5 +1,6 @@
 {% load static %}
 {% load cache %}
+{% load cloudinary %}
 
 {% comment %} {% cache 3600 sidebar %} {% endcomment %}
 <aside class="col-md-4">
@@ -25,7 +26,7 @@
 
             {% if user.is_authenticated %}
                 {% if user.profile.image %}
-                    <img src='https://storage.googleapis.com/django-mysite/{{user.profile.image}}' class='m-2' style='border-radius: 50%; max-width: 70%; width: 175px;'>
+                    <img src='{% cloudinary user.profile.image %}' class='m-2' style='border-radius: 50%; max-width: 70%; width: 175px;'>
                 {% else %}
                     <img src='{% static "mysite/user.png" %}' class="m-2" style="border-radius: 50%; max-width: 70%; width: 85px;">
                 {% endif %}

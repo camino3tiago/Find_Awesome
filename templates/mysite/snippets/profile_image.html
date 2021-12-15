@@ -1,4 +1,4 @@
-
+{% load cloudinary %}
 <label>Profile Image</label>
 
 <label id=="id_image_label" for='id_image'>
@@ -17,7 +17,7 @@
     </div>
 
     <!-- 画像がある場合 -->
-    <img id='image_preview' src='https://storage.googleapis.com/django-mysite/{{user.profile.image}}' class='{% if user.profile.image == '' %}d-none{% endif %} border rounded-circle' style='width: 150px; height: 150px; object-fit: cover;'>
+    <img id='image_preview' src='{% cloudinary user.profile.image %}' class='{% if user.profile.image == '' %}d-none{% endif %} border rounded-circle' style='width: 150px; height: 150px; object-fit: cover;'>
 
 </label>
 

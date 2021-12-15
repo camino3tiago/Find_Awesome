@@ -8,7 +8,7 @@ from .forms import UserCreationForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 import os
-from config.settings import GRECAPTCHA_SECRETKEY, GRECAPTCHA_SITEKEY, DEFAULT_EMAIL_FROM
+
 
 
 # def landing(request):
@@ -31,6 +31,17 @@ def index(request):
         'mysite/index.html',
         context,
     )
+
+# def login(request):
+#     context = {
+
+#     }
+#     if request.method == "POST":
+#         context['req'] = request.POST
+#     return render(request,
+#         'mysite/login.html',
+#         context
+#     )
 
 class Login(LoginView):
     template_name = 'mysite/auth.html'
@@ -86,9 +97,26 @@ class MyPageView(LoginRequiredMixin, View):
             messages.success(request, 'Updated!!')
         return render(request, 'mysite/mypage.html', self.context)
 
+"""
+@login_required     # ログインせず直接マイページにアクセスしたら、login画面にリダイレクトされる
+def mypage(request):
+    context = {}
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            messages.success(request, '更新完了しました！')
+        
+    return render(request, 
+        'mysite/mypage.html',
+        context
+    )
+"""
 
 class ContactView(View):
-    context = {'grecaptcha_sitekey': GRECAPTCHA_SITEKEY}
+    context = {'grecaptcha_sitekey': os.environ['GRECAPTCHA_SITEKEY']}
     
     def get(self, request):
         return render(request, 
@@ -113,9 +141,9 @@ class ContactView(View):
         名前：{request.POST.get("name")}\n\
         メールアドレス：{request.POST.get("email")}\n\
         内容：{request.POST.get("content")}\n以上'          # template(contact.html)のform内で指定したinputタグやらのname
-        email_from = DEFAULT_EMAIL_FROM
+        email_from = os.environ['DEFAULT_EMAIL_FROM']
         email_to = [    # 送信先は複数指定可
-            DEFAULT_EMAIL_FROM,   
+            os.environ['DEFAULT_EMAIL_FROM'],   
         ]
         send_mail(subject, message, email_from, email_to, )
         # ----- email設定 to me -----
@@ -125,6 +153,44 @@ class ContactView(View):
             'mysite/contact.html',
             self.context
         )
+
+"""
+def contact(request):
+    context = {
+        'grecaptcha_sitekey': os.environ['GRECAPTCHA_SITEKEY']
+    }
+
+    if request.method == 'POST':
+        recaptcha_token = request.POST.get('g-recaptcha-response')
+        res = grecaptcha_request(recaptcha_token)
+        if not res:
+            messages.error(request, 'failed with reCAPTCHA...')
+            return render(request, 
+                'mysite/contact.html',
+                context
+            )
+
+        # ----- email設定 to me ----- # localhost:8000/contact/にGETで送信される
+        from django.core.mail import send_mail
+        subject = 'お問い合わせがありました。'
+        message = f'お問い合わせがありました。\n\
+        名前：{request.POST.get("name")}\n\
+        メールアドレス：{request.POST.get("email")}\n\
+        内容：{request.POST.get("content")}\n以上'          # template(contact.html)のform内で指定したinputタグやらのname
+        email_from = os.environ['DEFAULT_EMAIL_FROM']
+        email_to = [    # 送信先は複数指定可
+            os.environ['DEFAULT_EMAIL_FROM'],   
+        ]
+        send_mail(subject, message, email_from, email_to, )
+        # ----- email設定 to me -----
+        messages.success(request, 'お問い合わせいただきありがとうございます。')
+    
+    return render(request,
+        'mysite/contact.html',
+        context
+    )
+
+"""
 
 def favorite(request):
     profile = Profile.objects.get(user=request.user)
@@ -149,7 +215,7 @@ def grecaptcha_request(token):
     url = 'https://www.google.com/recaptcha/api/siteverify'
     headers = { 'content-type': 'application/x-www-form-urlencoded' }
     data = {
-        'secret': GRECAPTCHA_SECRETKEY,
+        'secret': os.environ['GRECAPTCHA_SECRETKEY'],
         'response': token,
     }
     data = parse.urlencode(data).encode()

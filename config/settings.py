@@ -52,7 +52,16 @@ else:
             'HOST': env.str('DB_HOST'),
             'PORT': env.str('DB_PORT'),
         }
+    }
+    # Cloudinaryストレージ
+    import cloudinary
+    import cloudinary.uploader
+    import cloudinary.api
 
+    CLOUDINARY_STORAGE = {  # cloudinary設定
+        'CLOUD_NAME': env.str('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': env.str('CLOUDINARY_API_KEY'),
+        'API_SECRET': env.str('CLOUDINARY_API_SECRET')
     }
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
@@ -69,18 +78,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'account.apps.AccountConfig',
-    'blog.apps.BlogConfig',    
+    'blog.apps.BlogConfig',   
+    'cloudinary',   # cloudinary設定
+    'cloudinary_storage',   # cloudinary設定
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',   # whitenoise設定
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',   # whitenoise設定
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -164,6 +175,12 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' 
 
 MEDIA_URL = '/media/'   # サービス内でmediaフォルダのURLパスを設定
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')   # アップロードファイルなどを読み込む際のフォルダの場所を記載
+
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'  # cloudinary設定（ImageFieldやFileFieldと自動的に連携してくれる）
+
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
