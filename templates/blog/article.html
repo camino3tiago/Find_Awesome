@@ -1,7 +1,6 @@
 {% extends 'mysite/base.html' %}
 {% load cache %}
 {% load static %}
-{% load cloudinary %}
 
 {% block content %}
 
@@ -15,7 +14,7 @@
             <p class="small text-muted text-right">{{ article.created_at|date:"Y-m-j" }}  by <a href="#">{{ article.author }}</a></p>
 
             {% if article.image %}
-                <img src='{% cloudinary article.image.url %}' style='max-width:100%; max-height:100%;'>
+                <img src='{{ article.image.url }}' style='max-width:100%; max-height:100%;'>
             
                 {% comment %} <img src='https://storage.googleapis.com/django-mysite/{{article.image}}' style='max-width:100%; max-height:100%;'> {% endcomment %}
             {% endif %}

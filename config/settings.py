@@ -42,6 +42,7 @@ if DEBUG:
     }
 else:
     # 本番環境
+    DBUG = False
     env.read_env(root('.env.prod'))
     DATABASES = {
         'default': {
@@ -53,16 +54,7 @@ else:
             'PORT': env.str('DB_PORT'),
         }
     }
-    # Cloudinaryストレージ
-    import cloudinary
-    import cloudinary.uploader
-    import cloudinary.api
 
-    CLOUDINARY_STORAGE = {  # cloudinary設定
-        'CLOUD_NAME': env.str('CLOUDINARY_CLOUD_NAME'),
-        'API_KEY': env.str('CLOUDINARY_API_KEY'),
-        'API_SECRET': env.str('CLOUDINARY_API_SECRET')
-    }
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 SECRET_KEY = env.str('DJANGO_SECRET_KEY') 
@@ -176,6 +168,16 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' 
 MEDIA_URL = '/media/'   # サービス内でmediaフォルダのURLパスを設定
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')   # アップロードファイルなどを読み込む際のフォルダの場所を記載
 
+# Cloudinaryストレージ
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+CLOUDINARY_STORAGE = {  # cloudinary設定
+    'CLOUD_NAME': env.str('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env.str('CLOUDINARY_API_KEY'),
+    'API_SECRET': env.str('CLOUDINARY_API_SECRET')
+}
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'  # cloudinary設定（ImageFieldやFileFieldと自動的に連携してくれる）
 
