@@ -1,0 +1,81 @@
+<!--
+    <form method="POST" class='d-inline'>
+    {% csrf_token %}
+        <input type="hidden" name="like_count" value="true">
+        <button type="submit" class="btn btn-sm btn-outline-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightning-fill" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z"/>
+            </svg>
+            {{ article.like_count }} Like
+        </button>
+
+    </form>
+-->
+
+<div class='d-inline my-1'>
+    <button type='button' id='like_btn' class='btn btn-sm btn-outline-warning' style='margin: 2px;'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightning-fill" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z"/>
+        </svg>
+        <span id='like_count'>{{ article.like_count }}</span> Like
+    </button>
+
+</div>
+
+
+<script>
+    // ページ内容がオブジェクトとして読み込まれた(=DOMContentListener)時、イベントとして検知する(=addEventListener)
+    window.addEventListener('DOMContentLoaded', (event) => {    // 要素.addEventListener(イベント, 関数, オプション);
+
+        const likeBtn = document.getElementById('like_btn');
+        likeBtn.addEventListener('click', (event) => {
+            // 送信先URL
+            const url = '/blog/{{article.id}}/like/';
+            // csrftokenの取得（↓getCookie関数より）
+            const csrfToken = getCookie('csrftoken');
+            // 送信したいデータがある場合
+            let data = {};
+
+            // 送信(viewにdataを渡す)
+            fetch(url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify(data),
+            })
+            // viewから返ってきたJSONResponseを受け取る
+            .then(Response => Response.json())
+            .then(data => {
+                console.log(data);
+                if (data['message'] === 'success') {
+                    var likeCount = document.getElementById('like_count');
+                    likeCount.innerText = (Number(likeCount.innerText)+1).toString();   // 文字列をnumberにして+1した上で、再度文字列に
+                }
+            })
+            // 通信がうまくいかなかった等のエラーが発生した場合
+            .catch((error) => {
+                console.log(error);
+            });
+
+        }, false);
+    }, false);
+
+
+function getCookie(name) {
+    if (document.cookie && document.cookie !== "") {
+        for (const cookie of document.cookie.split(';')) {
+            const [key, value] = cookie.trim().split('=');
+            if (key === name) {
+                return decodeURIComponent(value);
+            }
+        }
+    }
+    return null;
+}
+
+</script>
+

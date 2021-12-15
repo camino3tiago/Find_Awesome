@@ -1,0 +1,62 @@
+{% extends 'mysite/base.html' %}
+ 
+{% block content %}
+ 
+<main class="container">
+    <div class="row">
+        <div class="col-md-8">
+        <h3 class="pb-3 mb-4" style="font-family: 'Raleway', sans-serif; font-size: 30px; border-bottom-style: groove; border-bottom-color: rgba(255, 255, 255, .6);">
+            MyPage
+        </h3>
+        {% if user.is_authenticated %}
+        <div>
+        <p><a href='{% url "blog:add" %}'>新規投稿はこちらから</a></p>
+        <p><a href='{% url "blog:my_posts" %}'>あなたの投稿一覧</a></p>
+        </div>
+        <hr>
+        {% endif %}
+        <form class="row g-3" method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+
+
+            {% include 'mysite/snippets/profile_image.html' %}
+            
+
+            <div class="col-12">
+                <label class="form-label">Username（in public）</label>
+                <input type="text" class="form-control" id="id_username" name="username" placeholder="Yamada Taro" value="{{ user.profile.username }}">
+              </div>
+ 
+              <div class="col-md-2">
+                <label class="form-label">Country</label>
+                <input type="text" class="form-control" id="id_country" name="country" value="{{ user.profile.country }}">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">City</label>
+                <input type='text' id="id_city" name="city" class="form-control" value="{{ user.profile.city }}">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Age</label>
+                <input class="form-control" id="id_age" name="age" value="{{ user.profile.age }}">
+              </div>
+              
+            <div class="col-12">
+              <label class="form-label">Hobby</label>
+              <input type="text" class="form-control" id="id_hobby" name="hobby" placeholder="Hobby" value="{{ user.profile.hobby }}">
+            </div>
+ 
+            <div class="col-12">
+              <button type="submit" class="btn btn-success">Save</button>
+            </div>
+
+          </form>
+ 
+        </div>
+ 
+        {% include 'mysite/snippets/sidebar.html' %}
+ 
+    </div>
+</main>
+ 
+ 
+{% endblock %}

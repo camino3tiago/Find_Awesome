@@ -1,0 +1,43 @@
+{% extends 'mysite/base.html' %}
+{% block content %}
+ 
+ {% load static %}
+<main class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h3 class="pb-4 mb-4 font-italic border-bottom">
+                Favorite
+            </h3>
+
+
+                {% for article in articles %}
+                <div class="col-11 mb-4 rounded">
+
+                <a href="{% url 'blog:article' article.id %}" class="text-decoration-none link-secondary">
+                    <div class="blog-post">
+                        <h2 class="blog-post-title">{{ article.title }}</h2>
+
+                        <p class="blog-post-meta">{{ article.created_at|date:"Y-m-j" }}  by <a href="#">{{ article.author }}</a></p>
+                        {% for tag in article.tags.all %}
+                            # {{ tag }}　
+                        {% endfor %}
+                    </div>
+                </a>
+
+                <hr>
+                </div>
+                {% endfor %}
+
+
+
+            
+        </div>
+
+ 
+        {% include 'mysite/snippets/sidebar.html' %}
+ 
+    </div>
+</main>
+ 
+ 
+{% endblock %}

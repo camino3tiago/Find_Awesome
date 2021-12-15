@@ -1,0 +1,26 @@
+{% extends 'mysite/base.html' %}
+{% load static %}
+{% block content %}
+ 
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h3 class="pb-2 mb-4" style="font-family: 'Raleway', sans-serif; font-size: 30px; border-bottom-style: groove; border-bottom-color: rgba(255, 255, 255, .6);">{% if 'add' in request.path %}New{% else %}Edit{% endif%} Post</h3>
+
+            <form method='POST' action={% if 'add' in request.path %}'{% url "blog:add" %}'{% else %}'{% url "blog:edit" article.id %}'{% endif %} style='margin:15px;' enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type='submit' value='{% if "add" in request.path %}投稿{% else %}更新{% endif %}' />
+            </form>
+
+        </div>
+
+        {% include 'mysite/snippets/sidebar.html' %}
+
+    </div>
+
+</main>
+
+
+{% endblock %}

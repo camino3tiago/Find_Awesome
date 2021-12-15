@@ -1,0 +1,36 @@
+{% extends 'mysite/base.html' %}
+
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-8">
+
+        <h3 class="pb-3 mb-4" style="font-family: 'Raleway', sans-serif; font-size: 30px; border-bottom-style: groove; border-bottom-color: rgba(255, 255, 255, .6); ">{{ page_title }}</h3>
+
+        {% for article in page_article %}
+        <div class="blog-post">
+            <h2 class="blog-post-title">{{ article.title }}</h2>
+            {% if 'my' in request.path %}<a class='btn btn-md btn-outline-secondary my-2' href='{% url "blog:edit" article.id %}'>Edit</a>{% endif %}
+            <p class="blog-post-meta">{{ article.created_at|date:"Y-m-j" }}  by <a href="#">{{ article.author }}</a></p>
+            <p>{{ article.text|truncatechars:200 }}</p>
+            <a href="{% url 'blog:article' article.id %}" class="">Read more...</a>
+        </div>  
+        <hr>
+        {% endfor %}
+
+        {% include 'mysite/snippets/pagination.html' %}
+
+
+        </div>
+    
+        {% include 'mysite/snippets/sidebar.html' %}
+
+    </div>
+
+</main>
+
+
+
+
+{% endblock %}

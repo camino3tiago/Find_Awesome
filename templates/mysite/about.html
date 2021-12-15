@@ -1,0 +1,37 @@
+{% extends 'mysite/base.html' %}
+{% load static %}
+{% block content %}
+ 
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h3 class="pb-2 mb-4" style="font-family: 'Raleway', sans-serif; font-size: 30px; border-bottom-style: groove; border-bottom-color: rgba(255, 255, 255, .6);">About</h3>
+
+            <img src='{% static "mysite/about.jpg" %}' style='width: 100%;'>
+            <div class='my-2 py-2'>
+                <p style='font-size: 18px;'>You can share your experiences, memories with people from all over the world!! <br><br>
+                <strong>We all are travellers. </strong>Even if it feels like a trivial daily scene to you, it will be possibly different to people with other cultural backgrounds.<br><br>
+                Through living in three countries, I had some cross-cultural experiences. Some cultures seemed interesting and great, but some seemed shocked and unacceptable. 
+                These experiences helped me to see my cultures objectively. <br><br>
+
+                I'm Japanese, and when I stayed in Mexico, I was surprised at the difference in the sense of time. In my country, trains and buses run almost on time, but they don't there.
+                When I started my stay, I was always frustrated. However as I gradually got used to life and got along with the locals, I began to think like this...  <br><br>
+                "If the bus comes on time, I'm lucky today!!" <br>In other words, <strong>I changed my mind positively and didn't take things for granted. </strong><br><br>
+                Of course, we don't think exactly the same, even if they have the same roots. So I often felt a difference in thinking even though I'm in Japan. <br>
+                But in order to understand each other, we should try to know the other fist. 
+                <br><br>
+                Communicating your thoughts and feelings leads to create or at least to make closer to the world where everyone can understand each other. <br><br>
+                So please share your experiences here and find something awesome too!! 
+                </p>
+            </div>
+        </div>
+
+        {% include 'mysite/snippets/sidebar.html' %}
+
+    </div>
+
+</main>
+
+
+{% endblock %}

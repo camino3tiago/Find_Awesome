@@ -1,0 +1,46 @@
+{% extends 'mysite/base.html' %}
+ 
+{% block content %}
+ 
+<main class="container">
+    <div class="row">
+        <div class="col-md-8">
+        <h3 class="pb-3 mb-4" style="font-family: 'Raleway', sans-serif; font-size: 30px; border-bottom-style: groove; border-bottom-color: rgba(255, 255, 255, .6);">
+            Contact
+        </h3>
+ 
+        <form class="row g-3" method="POST">
+            {% csrf_token %}
+            <div class="col-12">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" id="id_name" name="name" placeholder="" required>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">Email address</label>
+                <input type="email" class="form-control" id="id_email" name="email" required>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">Inquiry</label>
+                <textarea class="form-control" name="content" rows="4" required></textarea>
+            </div>
+
+            {% include 'mysite/snippets/grecaptcha.html' %}
+
+
+            <div class="col-12">
+                <button type="submit" id="submit" class="btn btn-primary" disabled>Submit</button>
+            </div>
+
+          </form>
+ 
+        </div>
+ 
+        {% include 'mysite/snippets/sidebar.html' %}
+ 
+    </div>
+</main>
+ 
+ 
+{% endblock %}
