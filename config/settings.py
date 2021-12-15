@@ -31,6 +31,7 @@ root = environ.Path(BASE_DIR, 'secrets')
 
 DEBUG = True
 if DEBUG:
+    # 開発環境
     env.read_env(root('.env.dev'))
     
     DATABASES = {
@@ -40,6 +41,7 @@ if DEBUG:
         }
     }
 else:
+    # 本番環境
     env.read_env(root('.env.prod'))
     DATABASES = {
         'default': {
