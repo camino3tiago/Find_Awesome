@@ -20,8 +20,8 @@ import os
 
 
 def index(request):
-    ranks = Article.objects.order_by('-like_count')[:2] # -をつけると降順（大⇨小）
-    articles = Article.objects.all().order_by('-created_at')[:3]
+    ranks = Article.objects.filter(is_published=True).order_by('-like_count')[:2] # -をつけると降順（大⇨小）
+    articles = Article.objects.filter(is_published=True).order_by('-created_at')[:3]
     context = {
         'title': 'Travel Site',
         'articles': articles,

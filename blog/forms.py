@@ -12,7 +12,7 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = (
-            'title', 'text', 'author', 'tags', 'image', 
+            'title', 'text', 'author', 'tags', 'image', 'is_published', 
         )
         labels = {
             'title': 'タイトル',
@@ -20,7 +20,7 @@ class PostForm(forms.ModelForm):
             'author': '筆者', 
             'tags': 'タグ', 
             'image': '画像', 
-            # 'is_published': '公開',
+            'is_published': '公開',
         }
 
     def __init__(self, *args, **kwargs):
@@ -29,4 +29,4 @@ class PostForm(forms.ModelForm):
         for field in self.base_fields.values():
             field.widget.attrs["class"] = "form-control"
         self.fields['author'].initial = self.user
-        
+        self.fields['is_published'] = forms.BooleanField(label='公開', required=False)

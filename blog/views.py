@@ -6,9 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
-def index(request):
-    articles = Article.objects.all().order_by('-created_at')
-    paginator = Paginator(articles, 3)  # 2つ/ページ
+def blog(request):
+    articles = Article.objects.filter(is_published=True).order_by('-created_at')
+    paginator = Paginator(articles, 3)  # 公開3つ/ページ
     page_number = request.GET.get('page')   # urlのパス名に'page'があれば、キー（page=1の1部分）を取得
     context = {
         'page_title': 'Blog List',
@@ -20,9 +20,23 @@ def index(request):
         context
     )
 
+# def draft(request):
+#     articles = Article.objects.filter(is_published=False).order_by("-created_at")
+#     paginator = Paginator(articles, 3)  # 公開3つ/ページ
+#     page_number = request.GET.get('page')   # urlのパス名に'page'があれば、キー（page=1の1部分）を取得
+#     context = {
+#         'page_title': 'Blog List',
+#         'page_published_article': paginator.get_page(page_number),
+#         'page_number': page_number,
+#     }
+#     return render(request,
+#         'blog/blogs.html',
+#         context
+#     )
+
+
 def article(request, pk):
     article = Article.objects.get(pk=pk)
-    print(article.author.user == request.user)
     if request.method == 'POST':
         if request.POST.get('like_count', None):
             article.like_count += 1
@@ -51,7 +65,7 @@ def article(request, pk):
 
 def tags(request, slug):
     tag = Tag.objects.get(slug=slug)
-    articles = tag.article_set.all()    # tagを参照しているArticle
+    articles = tag.article_set.filter(is_published=True)    # tagを参照しているArticle
     # ----- index()関数の使い回し（一部変更） -----
     paginator = Paginator(articles, 10)  # 10こ/ページ
     page_number = request.GET.get('page')   # urlのパス名に'page'があれば、キー（page=1の1部分）を取得
@@ -120,10 +134,14 @@ def add_post(request):
 
 def my_posts(request):
     articles = Article.objects.filter(author=request.user.profile)
+    published = articles.filter(is_published=True)
+    draft = articles.filter(is_published=False)
     return render(request,
         'blog/blogs.html',
         context = {
-            'page_article': articles
+            'page_article': articles,
+            'published': published, 
+            'draft': draft,
         }
     )
 
@@ -137,8 +155,8 @@ def edit_post(request, pk):
             form.save(commit=False)
             form.author = request.user.profile
             form.save()
-            messages.success(request, f'「{article.title}」を投稿しました。')
-            return redirect('blog:blog')
+            messages.success(request, f'「{article.title}」を更新しました。')
+            return redirect('blog:my_posts')
     else:
         form = PostForm(instance=article, **kwargs)
         return render(request,
@@ -155,7 +173,7 @@ def delete_post(request, pk):
     if request.method == "POST":
         article.delete()
         messages.info(request, f'「{article.title}」を削除しました。')
-    return redirect('blog:blog')
+    return redirect('blog:my_posts')
 
     
     
