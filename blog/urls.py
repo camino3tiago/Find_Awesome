@@ -14,5 +14,6 @@ urlpatterns = [
     path('<slug:pk>/fav/', views.add_favorite),
     path('add/', views.add_post, name='add'),
     path('edit/<int:pk>', views.edit_post, name='edit'),
+    path('delete/<int:pk>/', views.delete_post, name="delete"),
     path('my/posts/', views.my_posts, name='my_posts'),
 ]

@@ -10,9 +10,19 @@
 
         {% for article in page_article %}
         <div class="blog-post">
+            <div class="d-flex">
             <h2 class="blog-post-title">{{ article.title }}</h2>
-            {% if 'my' in request.path %}<a class='btn btn-md btn-outline-secondary my-2' href='{% url "blog:edit" article.id %}'>Edit</a>{% endif %}
+
+            {% if 'my' in request.path %}
+            <div class="d-flex justify-content-end mx-4">
+                <a class='btn btn-md btn-outline-secondary mb-2' href='{% url "blog:edit" article.id %}'>Edit</a>
+                <form method="POST" action='{% url "blog:delete" article.id %}'>{% csrf_token %}<input class='btn btn-md btn-outline-danger mx-2 mb-2' type="submit" value="Delete"></form>
+            </div>
+            {% endif %}
+            </div>
+
             <p class="blog-post-meta">{{ article.created_at|date:"Y-m-j" }}  by <a href="#">{{ article.author }}</a></p>
+
             <p>{{ article.text|truncatechars:200 }}</p>
             <a href="{% url 'blog:article' article.id %}" class="">Read more...</a>
         </div>  

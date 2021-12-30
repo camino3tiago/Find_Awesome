@@ -22,6 +22,7 @@ def index(request):
 
 def article(request, pk):
     article = Article.objects.get(pk=pk)
+    print(article.author.user == request.user)
     if request.method == 'POST':
         if request.POST.get('like_count', None):
             article.like_count += 1
@@ -39,6 +40,7 @@ def article(request, pk):
     context = {
         'article': article,
         'comments': comments,
+        'my_post': article.author.user == request.user, # 自分の投稿であればTrue, そうでなければfalse
     }
 
     return render(request,
@@ -146,3 +148,14 @@ def edit_post(request, pk):
                 'article': article
             }
         )
+
+def delete_post(request, pk):
+    article = Article.objects.get(pk=pk)
+    
+    if request.method == "POST":
+        article.delete()
+        messages.info(request, f'「{article.title}」を削除しました。')
+    return redirect('blog:blog')
+
+    
+    

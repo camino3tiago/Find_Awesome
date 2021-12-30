@@ -20,6 +20,7 @@ class PostForm(forms.ModelForm):
             'author': '筆者', 
             'tags': 'タグ', 
             'image': '画像', 
+            # 'is_published': '公開',
         }
 
     def __init__(self, *args, **kwargs):

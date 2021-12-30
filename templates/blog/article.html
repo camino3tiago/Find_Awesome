@@ -9,8 +9,17 @@
         <div class="col-md-8">
 
         {% comment %} {% cache 86400 article article.id %} {% endcomment %}
+            <div class="d-flex justify-content-between">
             <h4 class="font-italic display-6">{{ article.title }}</h4>
 
+            {% if my_post %}
+            <div class="d-flex me-4">
+                <p><a class='btn btn-md btn-outline-secondary mb-2 px-3' href='{% url "blog:edit" article.id %}'> Edit </a></p>
+                <form method="POST" action='{% url "blog:delete" article.id %}'>{% csrf_token %}<input class='btn btn-md btn-outline-danger mx-2 mb-2 px-2' type="submit" value="Delete"></form>
+            </div>
+            {% endif %}
+
+            </div>
             <p class="small text-muted text-right">{{ article.created_at|date:"Y-m-j" }}  by <a href="#">{{ article.author }}</a></p>
 
             {% if article.image %}
