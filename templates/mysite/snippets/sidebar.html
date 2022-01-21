@@ -7,7 +7,7 @@
         <div class="" style='display: inline-block;'>
 
             {% if user.is_authenticated %}
-                <h4 class="font-italic"> {{ user.profile.username }}</h4>
+                <a href="{% url 'mysite:mypage' %}" class="text-decoration-none link-dark"><h4 class="font-italic"> {{ user.profile.username }}</h4></a>
 
                 <a href="{% url 'mysite:favorite' %}" style='display:inlne-block;'>
                     <button type="button" class="btn btn-outline-danger my-2">
@@ -17,6 +17,7 @@
                         Fav List
                     </button>
                 </a>
+
             {% else %}
                 <h4>User</h4>
                 <p>Let's find something new!!</p>
